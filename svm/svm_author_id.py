@@ -12,6 +12,7 @@ import sys
 from time import time
 sys.path.append("../tools/")
 from email_preprocess import preprocess
+from sklearn import svm
 
 
 ### features_train and features_test are the features for the training
@@ -25,7 +26,6 @@ features_train, features_test, labels_train, labels_test = preprocess()
 #########################################################
 ### your code goes here ###
 
-from sklearn import svm
 clf = svm.SVC(kernel='rbf',C=10000.0,gamma='auto')
 
 # Reduce to 1% of data to speed up svm training and prediction

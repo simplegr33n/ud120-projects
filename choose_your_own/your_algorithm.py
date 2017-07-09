@@ -3,6 +3,10 @@
 import matplotlib.pyplot as plt
 from prep_terrain_data import makeTerrainData
 from class_vis import prettyPicture
+from sklearn import svm
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.metrics import accuracy_score
+from time import time
 
 features_train, labels_train, features_test, labels_test = makeTerrainData()
 
@@ -24,16 +28,28 @@ plt.scatter(grade_slow, bumpy_slow, color = "r", label="slow")
 plt.legend()
 plt.xlabel("bumpiness")
 plt.ylabel("grade")
-plt.show()
+#plt.show()
 ################################################################################
 
 
 ### your code here!  name your classifier object clf if you want the 
 ### visualization code (prettyPicture) to show you the decision boundary
 
+print "number of features:  ", len(features_train[0])
+
+t0 = time()
+print("training...")
+clf = AdaBoostClassifier(svm.SVC(kernel='rbf',gamma=750,probability=True),n_estimators=5,  learning_rate=0.1, algorithm='SAMME.R')
+clf.fit(features_train, labels_train)
+print "training time: " , time()-t0 , "s"
+
+t0 = time()
+print("predicting...")
+pred = clf.predict(features_test)
+print "prediction time: " , time()-t0 , "s"
 
 
-
+print "accuracy score: ", accuracy_score(labels_test, pred)
 
 
 

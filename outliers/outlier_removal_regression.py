@@ -26,7 +26,27 @@ ages_train, ages_test, net_worths_train, net_worths_test = train_test_split(ages
 ### fill in a regression here!  Name the regression object reg so that
 ### the plotting code below works, and you can see what your regression looks like
 
+from sklearn import linear_model
+import numpy as np
 
+# Create linear regression object
+reg = linear_model.LinearRegression()
+
+# Train the model using the training sets
+reg.fit(ages_train, net_worths_train)
+
+# The coefficients
+print('Slope Coefficients: ', reg.coef_)
+
+# Intercept
+print('Intercept: ', reg.intercept_)
+
+# The mean squared error
+print("Mean squared error: %.2f"
+      % np.mean((reg.predict(ages_test) - net_worths_test) ** 2))
+	  
+# Explained variance score: 1 is perfect prediction
+print('Variance score: %.2f' % reg.score(ages_test, net_worths_test))
 
 
 
@@ -77,6 +97,19 @@ if len(cleaned_data) > 0:
     plt.xlabel("ages")
     plt.ylabel("net worths")
     plt.show()
+	
+	# The coefficients
+    print('Slope Coefficients after outliers: ', reg.coef_)
+
+    # Intercept
+    print('Intercept after outliers: ', reg.intercept_)
+
+    # The mean squared error
+    print("Mean squared error after outliers: %.2f"
+      % np.mean((reg.predict(ages_test) - net_worths_test) ** 2))
+	  
+    # Explained variance score: 1 is perfect prediction
+    print('Variance score after outliers: %.2f' % reg.score(ages_test, net_worths_test))
 
 
 else:

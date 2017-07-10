@@ -29,7 +29,7 @@ target, features = targetFeatureSplit( data )
 from sklearn.cross_validation import train_test_split
 feature_train, feature_test, target_train, target_test = train_test_split(features, target, test_size=0.5, random_state=42)
 train_color = "b"
-test_color = "b"
+test_color = "r"
 
 
 
@@ -38,9 +38,30 @@ test_color = "b"
 ### plots it correctly. Don't forget to change the test_color above from "b" to
 ### "r" to differentiate training points from test points.
 
+from sklearn import linear_model
+import numpy as np
 
+# Create linear regression object
+reg = linear_model.LinearRegression()
 
+# Train the model using the training sets
+reg.fit(feature_train, target_train)
 
+# The coefficients
+print('Slope Coefficients: \n', reg.coef_)
+
+# Intercept
+print('Intercept: \n', reg.intercept_)
+
+# The mean squared error
+print("Mean squared error: %.2f"
+      % np.mean((reg.predict(feature_test) - target_test) ** 2))
+	  
+# Explained variance score: 1 is perfect prediction
+print('Variance score: %.2f' % reg.score(feature_test, target_test))
+
+# Explained variance score: 1 is perfect prediction
+print('Variance score on training set: %.2f' % reg.score(feature_train, target_train))
 
 
 
@@ -64,6 +85,16 @@ try:
     plt.plot( feature_test, reg.predict(feature_test) )
 except NameError:
     pass
+	
+reg.fit(feature_test, target_test)
+plt.plot(feature_train, reg.predict(feature_train), color="b") 
+
+# The coefficients
+print('Slope Coefficients without outliers: \n', reg.coef_)
+
+# Intercept
+print('Intercept without outliers: \n', reg.intercept_)
+
 plt.xlabel(features_list[1])
 plt.ylabel(features_list[0])
 plt.legend()

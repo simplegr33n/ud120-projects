@@ -43,34 +43,67 @@ data_dict = pickle.load( open("../final_project/final_project_dataset.pkl", "r")
 ### there's an outlier--remove it! 
 data_dict.pop("TOTAL", 0)
 
+## find min / max exercised_stock_options
+## initialize variables with Skilling for fun
+min_eso = data_dict["SKILLING JEFFREY K"]["exercised_stock_options"]
+max_eso = data_dict["SKILLING JEFFREY K"]["exercised_stock_options"]
+for entry in data_dict:
+    if data_dict[entry]["exercised_stock_options"] != "NaN":
+        if data_dict[entry]["exercised_stock_options"] > max_eso:
+            max_eso = data_dict[entry]["exercised_stock_options"]
+        if data_dict[entry]["exercised_stock_options"] < min_eso:
+            min_eso = data_dict[entry]["exercised_stock_options"]
+        
+print "min exercised_stock_options: ", min_eso
+print "max exercised_stock_options: ", max_eso
+
+
+## find min / max salary
+## initialize variables with Skilling for fun
+min_salary = data_dict["SKILLING JEFFREY K"]["salary"]
+max_salary = data_dict["SKILLING JEFFREY K"]["salary"]
+for entry in data_dict:
+    if data_dict[entry]["salary"] != "NaN":
+        if data_dict[entry]["salary"] > max_salary:
+            max_salary = data_dict[entry]["salary"]
+        if data_dict[entry]["salary"] < min_salary:
+            min_salary = data_dict[entry]["salary"]
+        
+print "min salary: ", min_salary
+print "max salary: ", max_salary
+
 
 ### the input features we want to use 
 ### can be any key in the person-level dictionary (salary, director_fees, etc.) 
 feature_1 = "salary"
 feature_2 = "exercised_stock_options"
+feature_3 = "total_payments"
 poi  = "poi"
-features_list = [poi, feature_1, feature_2]
+features_list = [poi, feature_1, feature_2, feature_3]
 data = featureFormat(data_dict, features_list )
 poi, finance_features = targetFeatureSplit( data )
+
+
 
 
 ### in the "clustering with 3 features" part of the mini-project,
 ### you'll want to change this line to 
 ### for f1, f2, _ in finance_features:
 ### (as it's currently written, the line below assumes 2 features)
-for f1, f2 in finance_features:
-    plt.scatter( f1, f2 )
+for f1, f2, f3 in finance_features:
+    plt.scatter( f1, f2, f3 )
 plt.show()
 
 ### cluster here; create predictions of the cluster labels
 ### for the data and store them to a list called pred
-
-
+from sklearn.cluster import KMeans
+kmeans = KMeans(n_clusters=2).fit(finance_features)
+pred = kmeans.predict(finance_features)
 
 
 ### rename the "name" parameter when you change the number of features
 ### so that the figure gets saved to a different file
 try:
-    Draw(pred, finance_features, poi, mark_poi=False, name="clusters.pdf", f1_name=feature_1, f2_name=feature_2)
+    Draw(pred, finance_features, poi, mark_poi=False, name="clusters2.pdf", f1_name=feature_1, f2_name=feature_2)
 except NameError:
     print "no predictions object named pred found, no clusters to plot"

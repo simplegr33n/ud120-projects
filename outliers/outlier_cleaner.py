@@ -19,7 +19,7 @@ def outlierCleaner(predictions, ages, net_worths):
     errors = (net_worths-predictions)**2
     # Create cleaned tuple
     cleaned_data = zip(ages,net_worths,errors)
-	# Sort data
+	# Sort data based on error
     cleaned_data = sorted(cleaned_data, key=lambda x:x[2], reverse=True)
     # Specify limit for amount of data returned
     limit = int(len(net_worths)*0.1)
